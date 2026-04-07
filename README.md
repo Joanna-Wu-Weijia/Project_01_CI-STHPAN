@@ -39,59 +39,76 @@ Datasets: [Link](https://pan.baidu.com/s/12SgBKg50pG-F3SpQA_x0tQ) Code: 2vqs
 
 Pretrained models：[Link](https://pan.baidu.com/s/1HGJ0sAriVLRhc7KqkLC51w) Code: h729
 
-## Example
+## Quick Start
 
-Pre-training and fine-tuning of hypergraphs constructed based on wikidata relations on NASDAQ is shown here as an example.
+### Example with NASDAQ (Wikidata Relations)
 
-### Pretrain
+Pre-training and fine-tuning of hypergraphs constructed based on wikidata relations on NASDAQ.
+
+#### Step 1: Pretrain
 
 ```
 cd ./CI-STHPAN_self_supervised
 bash ./scripts/pretrain/pre_graph_wiki.sh
 ```
 
-### Finetune
+#### Step 2: Finetune/Test
 
 ```
 cd ./CI-STHPAN_self_supervised
-bash ./scripts/finetuned/[27]graph_wiki.sh
+bash ./scripts/finetune/[27]graph_wiki.sh
 ```
 
-## A-Share (CSI300) Adaptation
+## A-Share (CSI300) Market Adaptation
 
-We provide scripts to adapt CI-STHPAN for the China A-Share market using CSI300 constituent stocks via Qlib data.
+We provide a complete pipeline to adapt CI-STHPAN for the China A-Share market using CSI300 constituent stocks via Qlib data.
 
 **Data summary:**
 - Time range: 2020-01-02 ~ 2026-03-20 (1504 trading days)
 - Universe: CSI300 constituent stocks (union), 481 tickers
 - Train: day 0–901 (902 days), Val: day 902–1202 (301 days), Test: day 1203–1503 (301 days)
 
-### Step 1: Convert Qlib data to CSV
+### Step 1: Data Processing - Convert Qlib Data to CSV
 
-Place your Qlib data under `my_qlib_data/` (with `calendars/`, `instruments/`, `features/` subdirectories), then run:
+Place your Qlib data under `my_qlib_data/` directory with the following structure:
+```
+my_qlib_data/
+├── calendars/
+├── instruments/
+└── features/
+```
+
+Run the data conversion script:
 
 ```
 cd ./CI-STHPAN_self_supervised
 python scripts/step1_qlib_to_csv.py
 ```
 
-This generates per-stock CSVs under `src/data/datasets/stock/2020-01-02/`, a ticker list, and a trading calendar file.
+This generates:
+- Per-stock CSV files under `src/data/datasets/stock/2020-01-02/`
+- Ticker list file
+- Trading calendar file
 
-### Step 2: Pretrain (A-Share)
+### Step 2: Pre-training
+
+Run the pre-training script on the converted data:
 
 ```
 cd ./CI-STHPAN_self_supervised
 bash ./scripts/pretrain/pre_ashare.sh
 ```
 
-### Step 3: Finetune (A-Share)
+### Step 3: Fine-tuning & Testing
+
+Run the fine-tuning script to test on the validation and test sets:
 
 ```
 cd ./CI-STHPAN_self_supervised
 bash ./scripts/finetune/ft_ashare.sh
 ```
 
-The finetune script loops over alpha values (1, 2, 4, 6, 8, 10) — select the best based on validation loss.
+**Note:** The finetune script loops over alpha values (1, 2, 4, 6, 8, 10) — select the best based on validation loss.
 
 
 
