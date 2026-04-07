@@ -181,15 +181,18 @@ def get_dls(params):
     elif params.dset == 'stock':
         root_path = _STOCK_DATA_ROOT + os.sep
         tickers_fname = params.market + '_tickers_qualify_dr-0.98_min-5_smooth.csv'
+        # Select data path based on market: NASDAQ uses 2013-01-01, AShare uses 2020-01-02
+        data_path = '2013-01-01/' if params.market == 'NASDAQ' else '2020-01-02/'
         print('#datautils stock root_path:', root_path)
         print('#datautils tickers_fname:', tickers_fname)
+        print('#datautils data_path:', data_path)
 
         size = [params.context_points, 0, params.target_points]
         dls = DataLoaders(
                 datasetCls=Dataset_Stock,
                 dataset_kwargs={
                 'root_path': root_path,
-                'data_path': '2020-01-02/',
+                'data_path': data_path,
                 'market_name': params.market,
                 'tickers_fname': tickers_fname,
                 'features': params.features,
