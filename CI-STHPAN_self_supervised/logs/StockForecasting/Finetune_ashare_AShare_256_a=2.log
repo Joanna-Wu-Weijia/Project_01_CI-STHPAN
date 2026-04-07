@@ -1,0 +1,151 @@
+args: Namespace(random_seed=2023, is_finetune=1, is_linear_probe=0, dset_finetune='stock', context_points=256, target_points=1, batch_size=1, num_workers=0, scaler='standard', features='M', market='AShare', patch_len=12, stride=12, revin=1, ci=1, graph=0, rel_type=0, k=20, n_layers=3, n_heads=16, d_model=128, d_ff=256, dropout=0.2, head_dropout=0.0, n_epochs_finetune=20, lr=0.0001, alpha=2, n_epochs_pretrain=100, mask_ratio=0.4, pretrained_model=None, finetuned_model_id=1, model_type='based_model')
+pretrained checkpoint: /Users/apple/Desktop/2026 proj_01/S3-practice/CI-STHPAN/finetune/saved_models/AShare/pretrained/patchtst_pretrained_cw256_patch12_stride12_epochs-pretrain100_mask0.4_revin1_ci1_graph0_rel_type0_k20/model0/model.pth
+Using device: mps (Apple GPU)
+#datautils stock root_path: /Users/apple/Desktop/2026 proj_01/S3-practice/CI-STHPAN/CI-STHPAN_self_supervised/src/data/datasets/stock/
+#datautils tickers_fname: AShare_tickers_qualify_dr-0.98_min-5_smooth.csv
+#tickers selected: 462
+#Dataset_Stock loading CSVs for split=train (~462 tickers) — this can take several minutes…
+#single EOD data shape: (902, 5)
+  … loaded 50/462 tickers (train)
+  … loaded 100/462 tickers (train)
+  … loaded 150/462 tickers (train)
+  … loaded 200/462 tickers (train)
+  … loaded 250/462 tickers (train)
+  … loaded 300/462 tickers (train)
+  … loaded 350/462 tickers (train)
+  … loaded 400/462 tickers (train)
+  … loaded 450/462 tickers (train)
+  … loaded 462/462 tickers (train)
+#eod_data shape: (462, 902, 5)
+#masks shape: (462, 902)
+#ground_truth shape: (462, 902)
+#base_price shape: (462, 902)
+#data_stamp shape: (462, 902, 4)
+#tickers selected: 462
+#Dataset_Stock loading CSVs for split=val (~462 tickers) — this can take several minutes…
+#single EOD data shape: (557, 5)
+  … loaded 50/462 tickers (val)
+  … loaded 100/462 tickers (val)
+  … loaded 150/462 tickers (val)
+  … loaded 200/462 tickers (val)
+  … loaded 250/462 tickers (val)
+  … loaded 300/462 tickers (val)
+  … loaded 350/462 tickers (val)
+  … loaded 400/462 tickers (val)
+  … loaded 450/462 tickers (val)
+  … loaded 462/462 tickers (val)
+#eod_data shape: (462, 557, 5)
+#masks shape: (462, 557)
+#ground_truth shape: (462, 557)
+#base_price shape: (462, 557)
+#data_stamp shape: (462, 557, 4)
+#tickers selected: 462
+#Dataset_Stock loading CSVs for split=test (~462 tickers) — this can take several minutes…
+#single EOD data shape: (557, 5)
+  … loaded 50/462 tickers (test)
+  … loaded 100/462 tickers (test)
+  … loaded 150/462 tickers (test)
+  … loaded 200/462 tickers (test)
+  … loaded 250/462 tickers (test)
+  … loaded 300/462 tickers (test)
+  … loaded 350/462 tickers (test)
+  … loaded 400/462 tickers (test)
+  … loaded 450/462 tickers (test)
+  … loaded 462/462 tickers (test)
+#eod_data shape: (462, 557, 5)
+#masks shape: (462, 557)
+#ground_truth shape: (462, 557)
+#base_price shape: (462, 557)
+#data_stamp shape: (462, 557, 4)
+number of patches: 21
+number of model params 404481
+weights from /Users/apple/Desktop/2026 proj_01/S3-practice/CI-STHPAN/finetune/saved_models/AShare/pretrained/patchtst_pretrained_cw256_patch12_stride12_epochs-pretrain100_mask0.4_revin1_ci1_graph0_rel_type0_k20/model0/model.pth successfully transferred!
+
+suggested_lr 0.000298364724028334
+end-to-end finetuning
+#datautils stock root_path: /Users/apple/Desktop/2026 proj_01/S3-practice/CI-STHPAN/CI-STHPAN_self_supervised/src/data/datasets/stock/
+#datautils tickers_fname: AShare_tickers_qualify_dr-0.98_min-5_smooth.csv
+#tickers selected: 462
+#Dataset_Stock loading CSVs for split=train (~462 tickers) — this can take several minutes…
+#single EOD data shape: (902, 5)
+  … loaded 50/462 tickers (train)
+  … loaded 100/462 tickers (train)
+  … loaded 150/462 tickers (train)
+  … loaded 200/462 tickers (train)
+  … loaded 250/462 tickers (train)
+  … loaded 300/462 tickers (train)
+  … loaded 350/462 tickers (train)
+  … loaded 400/462 tickers (train)
+  … loaded 450/462 tickers (train)
+  … loaded 462/462 tickers (train)
+#eod_data shape: (462, 902, 5)
+#masks shape: (462, 902)
+#ground_truth shape: (462, 902)
+#base_price shape: (462, 902)
+#data_stamp shape: (462, 902, 4)
+#tickers selected: 462
+#Dataset_Stock loading CSVs for split=val (~462 tickers) — this can take several minutes…
+#single EOD data shape: (557, 5)
+  … loaded 50/462 tickers (val)
+  … loaded 100/462 tickers (val)
+  … loaded 150/462 tickers (val)
+  … loaded 200/462 tickers (val)
+  … loaded 250/462 tickers (val)
+  … loaded 300/462 tickers (val)
+  … loaded 350/462 tickers (val)
+  … loaded 400/462 tickers (val)
+  … loaded 450/462 tickers (val)
+  … loaded 462/462 tickers (val)
+#eod_data shape: (462, 557, 5)
+#masks shape: (462, 557)
+#ground_truth shape: (462, 557)
+#base_price shape: (462, 557)
+#data_stamp shape: (462, 557, 4)
+#tickers selected: 462
+#Dataset_Stock loading CSVs for split=test (~462 tickers) — this can take several minutes…
+#single EOD data shape: (557, 5)
+  … loaded 50/462 tickers (test)
+  … loaded 100/462 tickers (test)
+  … loaded 150/462 tickers (test)
+  … loaded 200/462 tickers (test)
+  … loaded 250/462 tickers (test)
+  … loaded 300/462 tickers (test)
+  … loaded 350/462 tickers (test)
+  … loaded 400/462 tickers (test)
+  … loaded 450/462 tickers (test)
+  … loaded 462/462 tickers (test)
+#eod_data shape: (462, 557, 5)
+#masks shape: (462, 557)
+#ground_truth shape: (462, 557)
+#base_price shape: (462, 557)
+#data_stamp shape: (462, 557, 4)
+number of patches: 21
+number of model params 404481
+weights from /Users/apple/Desktop/2026 proj_01/S3-practice/CI-STHPAN/finetune/saved_models/AShare/pretrained/patchtst_pretrained_cw256_patch12_stride12_epochs-pretrain100_mask0.4_revin1_ci1_graph0_rel_type0_k20/model0/model.pth successfully transferred!
+
+Finetune the head
+          epoch     train_loss     valid_loss           time
+Better model found at epoch 0 with valid_loss value: 0.012363981170907765.
+              0       0.026438       0.012364          02:58
+              1       0.015194       0.013211          03:03
+Better model found at epoch 2 with valid_loss value: 0.007415293063040192.
+              2       0.013045       0.007415          03:03
+Better model found at epoch 3 with valid_loss value: 0.0069793046906937.
+              3       0.011491       0.006979          03:05
+              4       0.010968       0.007674          03:06
+Better model found at epoch 5 with valid_loss value: 0.00614798029395829.
+              5       0.010141       0.006148          03:01
+Better model found at epoch 6 with valid_loss value: 0.005286775158093221.
+              6       0.009874       0.005287          02:58
+              7       0.009379       0.005431          03:05
+              8       0.009323       0.006042          03:05
+              9       0.009285       0.005930          03:06
+Finetune the entire network
+          epoch     train_loss     valid_loss           time
+Better model found at epoch 0 with valid_loss value: 0.004391912606071396.
+              0       0.008792       0.004392          08:37
+              1       0.008395       0.004631          08:22
+              2       0.020303       0.043627          08:04
+    4       0.057976       0.052326          08:39
+              5       0.058620       0.043291          08:21
+              6       0.057248       0.061724          08:35
