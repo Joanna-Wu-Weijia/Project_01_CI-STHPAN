@@ -17,7 +17,7 @@ data_name=stock
 random_seed=2023
 
 
-python -u ./patchtst_pretrain.py \
+python -u ../../patchtst_pretrain.py \
       --random_seed $random_seed \
       --market $model_id_name \
       --context_points $seq_len \
