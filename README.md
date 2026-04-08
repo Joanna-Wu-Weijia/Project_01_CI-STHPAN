@@ -39,22 +39,34 @@ Datasets: [Link](https://pan.baidu.com/s/12SgBKg50pG-F3SpQA_x0tQ) Code: 2vqs
 
 Pretrained models：[Link](https://pan.baidu.com/s/1HGJ0sAriVLRhc7KqkLC51w) Code: h729
 
-## Example
+## Examples
 
-Pre-training and fine-tuning of hypergraphs constructed based on wikidata relations on NASDAQ is shown here as an example.
+### Example 1: NASDAQ (wiki-graph)
 
-### Pretrain
+Pre-training and fine-tuning with wikidata hypergraph on NASDAQ:
 
 ```
 cd ./CI-STHPAN_self_supervised
 bash ./scripts/pretrain/pre_graph_wiki.sh
+bash ./scripts/finetune/[27]graph_wiki.sh
 ```
 
-### Finetune
+### Example 2: A-share (Qlib CSI300/CSI500)
+
+Run the full A-share pipeline (data export -> pretrain -> finetune):
 
 ```
 cd ./CI-STHPAN_self_supervised
-bash ./scripts/finetune/[27]graph_wiki.sh
+python scripts/step1_qlib_to_csv.py
+bash ./scripts/pretrain/pre_ashare.sh
+bash ./scripts/finetune/ft_ashare.sh
+```
+
+Use CSI500 for export:
+
+```
+cd ./CI-STHPAN_self_supervised
+QLIB_INSTRUMENT=csi500.txt python scripts/step1_qlib_to_csv.py
 ```
 
 ## A-Share adaptation (Qlib: CSI300 / CSI500)
