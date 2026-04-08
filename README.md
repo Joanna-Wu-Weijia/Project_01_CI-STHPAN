@@ -66,18 +66,34 @@ We provide scripts to run CI-STHPAN on the China A-share market using Qlib data.
 - Universe: union of index constituents from `instruments/` (e.g. `csi300.txt` or `csi500.txt`) over that window; ticker count depends on the index file and quality filters in `step1_qlib_to_csv.py`
 - Train: day 0–901 (902 days), Val: day 902–1202 (301 days), Test: day 1203–1503 (301 days)
 
-### Step 1: Convert Qlib data to CSV
+### Step 1: Prepare and align your Qlib data
 
-1. Place your Qlib dump under `~/Desktop/my_qlib_data/` (or change `QLIB_ROOT` in `scripts/step1_qlib_to_csv.py`) with `calendars/`, `instruments/`, and `features/` as in standard Qlib layouts.
-2. Ensure the instrument list you want exists, e.g. `instruments/csi300.txt` or `instruments/csi500.txt`.
-3. From `CI-STHPAN_self_supervised`, run:
+Do this **before** running the export script. The converter assumes a normal Qlib data tree and settings that match what you want to train on.
+
+1. **Obtain Qlib A-share data**  
+   Download or dump data so you have at least `calendars/day.txt`, `instruments/*.txt`, and per-symbol `features/<TICKER>/adjclose.day.bin` (see [Qlib data setup](https://qlib.readthedocs.io/)). Feature coverage must extend through the date window you export (below).
+
+2. **Point the script at your data directory**  
+   Set `QLIB_ROOT` in `scripts/step1_qlib_to_csv.py` (default `~/Desktop/my_qlib_data/`) to the root folder that contains `calendars/`, `instruments/`, and `features/`.
+
+3. **Choose the stock universe**  
+   Decide **CSI300** vs **CSI500** (or another list Qlib provides). The file must exist under `instruments/`, e.g. `csi300.txt` or `csi500.txt`. You will select it when exporting (default is `csi300.txt`; use `QLIB_INSTRUMENT=csi500.txt` for CSI500). The export keeps **SH / SZ / BJ** symbols that appear in that index file.
+
+4. **Align the time window with the model**  
+   In the same Python file, `DATE_START` / `DATE_END` define the trading days written to CSV. They must stay consistent with the **1504 trading days** and train/val/test splits expected for `market=AShare` in code (see **Data summary** above). If you change these dates, you must update `pred_dataset.py` / training config accordingly—otherwise keep the defaults.
+
+After the above is set, proceed to Step 2.
+
+### Step 2: Convert Qlib data to CSV
+
+From `CI-STHPAN_self_supervised`, run:
 
 ```
 cd ./CI-STHPAN_self_supervised
 python scripts/step1_qlib_to_csv.py
 ```
 
-By default the script reads `instruments/csi300.txt`. To use CSI500 without editing the file:
+To use CSI500 without editing the script:
 
 ```
 QLIB_INSTRUMENT=csi500.txt python scripts/step1_qlib_to_csv.py
@@ -90,16 +106,16 @@ QLIB_INSTRUMENT=csi500.txt python scripts/step1_qlib_to_csv.py
 - `AShare_tickers_qualify_dr-0.98_min-5_smooth.csv` — ticker list for training (`--market AShare`)
 - `AShare_aver_line_dates.csv` — trading dates aligned with the tensors
 
-### Step 2: Pretrain (A-Share)
+### Step 3: Pretrain (A-Share)
 
-Uses `--market AShare` and the stock dataset under `2020-01-02/`; no separate logic per exchange. After changing the index or re-running Step 1, run pretrain again.
+Uses `--market AShare` and the stock dataset under `2020-01-02/`; no separate logic per exchange. After you change Qlib settings or re-run Step 2, run pretrain again.
 
 ```
 cd ./CI-STHPAN_self_supervised
 bash ./scripts/pretrain/pre_ashare.sh
 ```
 
-### Step 3: Finetune (A-Share)
+### Step 4: Finetune (A-Share)
 
 ```
 cd ./CI-STHPAN_self_supervised
