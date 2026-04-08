@@ -39,6 +39,8 @@ python -u ./patchtst_pretrain.py \
       --d_ff 256 \
       --dropout 0.2 \
       --head_dropout 0 \
-      --n_epochs_pretrain 100 \
+      # [change] reduce epochs to avoid late-stage degradation
+      --n_epochs_pretrain 30 \
       --batch_size 1 \
-      --lr 0.0001 2>&1 | tee "$LOG"
+      # [change] use a smaller fixed LR (recommended)
+      --lr 3e-4 2>&1 | tee "$LOG"

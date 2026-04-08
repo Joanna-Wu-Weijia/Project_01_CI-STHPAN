@@ -170,6 +170,8 @@ def pretrain_func(lr=args.lr):
                         cbs=cbs,
                         #metrics=[mse]
                         )                        
+    # [change] optional safety: enable gradient clipping during pretraining
+    learn.grad_clip = 1.0
     # fit the data to the model
     learn.fit_one_cycle(n_epochs=args.n_epochs_pretrain, lr_max=lr)
 
@@ -188,11 +190,9 @@ if __name__ == '__main__':
             os.makedirs(args.save_path+args.save_pretrained_model+'/model'+str(itr)+'/')
         
         args.dset = args.dset_pretrain
-        print('Step 1/2: lr_finder (loads datasets + short run)…', flush=True)
-        suggested_lr = find_lr()
-        print('Step 2/2: pretrain fit_one_cycle…', flush=True)
-        # Pretrain
-        pretrain_func(suggested_lr)
+        # [change] skip lr_finder; use fixed lr from --lr
+        print('Step 1/1: pretrain fit_one_cycle with fixed --lr…', flush=True)
+        pretrain_func(args.lr)
 
         endtime = datetime.now()
         time = str((endtime - starttime).seconds)

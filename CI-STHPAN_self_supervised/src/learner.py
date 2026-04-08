@@ -305,6 +305,9 @@ class Learner(GetAttr):
         self.opt.zero_grad()                 
         # gradient
         self.loss.backward()
+        # [change] optional grad clipping for stability (enabled via learner.grad_clip)
+        if getattr(self, "grad_clip", None) is not None:
+            torch.nn.utils.clip_grad_norm_(self.model.parameters(), self.grad_clip)
         # update weights
         self.opt.step() 
 
