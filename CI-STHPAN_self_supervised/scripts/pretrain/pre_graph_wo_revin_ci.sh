@@ -7,6 +7,8 @@ fi
 if [ ! -d "./logs/StockForecasting" ]; then
     mkdir ./logs/StockForecasting
 fi
+_PRETRAIN_PY="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)/patchtst_pretrain.py"
+
 seq_len=512
 pred_len=1
 model_name=Pretrain_graph_wo_revin_ci
@@ -19,7 +21,7 @@ data_name=stock
 random_seed=2023
 
 k=5
-python -u ../../patchtst_pretrain.py \
+python -u "$_PRETRAIN_PY" \
       --random_seed $random_seed \
       --market $model_id_name \
       --context_points $seq_len \

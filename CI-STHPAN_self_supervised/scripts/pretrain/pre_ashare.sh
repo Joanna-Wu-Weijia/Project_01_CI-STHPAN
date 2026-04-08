@@ -1,4 +1,8 @@
-
+#!/usr/bin/env bash
+# A 股预训练：--market AShare，数据来自 scripts/step1_qlib_to_csv.py
+# step1 从 Qlib 的 instruments/csi300.txt 或 csi500.txt 读入成分并集，
+# 导出 SH/SZ/BJ 全市场标的（与指数文件一致），不写死交易所。
+# 切换指数时：改 step1 里的 INSTRUMENT_FILE，重新跑 step1，再跑本脚本。
 
 if [ ! -d "./logs" ]; then
     mkdir ./logs

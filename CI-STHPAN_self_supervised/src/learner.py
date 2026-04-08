@@ -439,6 +439,13 @@ class Learner(GetAttr):
             cb = GetTestCB(tickers_num=1737, test_dates = len(self.dl))
         elif market == 'TSE':
             cb = GetTestCB(tickers_num=95, test_dates = len(self.dl))
+        elif market == 'AShare':
+            # A 股：多标的张量第一维为股票数（含 SH/SZ/BJ），与 Dataset_Stock.eod_data 一致
+            ds = self.dl.dataset
+            n_tickers = int(ds.eod_data.shape[0])
+            cb = GetTestCB(tickers_num=n_tickers, test_dates=len(self.dl))
+        else:
+            raise ValueError(f"learn.test: unsupported market={market!r}")
         self.add_callback(cb)
         self('before_test')
         if self.graph:

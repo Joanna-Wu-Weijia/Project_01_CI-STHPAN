@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# A 股微调 / 测试：--market AShare；数据与预训练相同，由 scripts/step1_qlib_to_csv.py 生成
+#（instruments/csi300.txt 或 csi500.txt，含 SH/SZ/BJ）。
 # Run from anywhere: CI-STHPAN_self_supervised (recommended) or via scripts/finetune/ft_ashare.sh
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$ROOT" || exit 1

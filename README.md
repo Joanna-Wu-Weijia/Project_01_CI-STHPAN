@@ -54,30 +54,45 @@ bash ./scripts/pretrain/pre_graph_wiki.sh
 
 ```
 cd ./CI-STHPAN_self_supervised
-bash ./scripts/finetuned/[27]graph_wiki.sh
+bash ./scripts/finetune/[27]graph_wiki.sh
 ```
 
-## A-Share (CSI300) Adaptation
+## A-Share adaptation (Qlib: CSI300 / CSI500)
 
-We provide scripts to adapt CI-STHPAN for the China A-Share market using CSI300 constituent stocks via Qlib data.
+We provide scripts to run CI-STHPAN on the China A-share market using Qlib data. The export pipeline keeps **Shanghai (SH), Shenzhen (SZ), and Beijing (BJ)** listings that appear in the chosen index file—no exchange is dropped by default.
 
-**Data summary:**
+**Data summary (aligned with `Dataset_Stock` when `market=AShare`):**
 - Time range: 2020-01-02 ~ 2026-03-20 (1504 trading days)
-- Universe: CSI300 constituent stocks (union), 481 tickers
+- Universe: union of index constituents from `instruments/` (e.g. `csi300.txt` or `csi500.txt`) over that window; ticker count depends on the index file and quality filters in `step1_qlib_to_csv.py`
 - Train: day 0–901 (902 days), Val: day 902–1202 (301 days), Test: day 1203–1503 (301 days)
 
 ### Step 1: Convert Qlib data to CSV
 
-Place your Qlib data under `my_qlib_data/` (with `calendars/`, `instruments/`, `features/` subdirectories), then run:
+1. Place your Qlib dump under `~/Desktop/my_qlib_data/` (or change `QLIB_ROOT` in `scripts/step1_qlib_to_csv.py`) with `calendars/`, `instruments/`, and `features/` as in standard Qlib layouts.
+2. Ensure the instrument list you want exists, e.g. `instruments/csi300.txt` or `instruments/csi500.txt`.
+3. From `CI-STHPAN_self_supervised`, run:
 
 ```
 cd ./CI-STHPAN_self_supervised
 python scripts/step1_qlib_to_csv.py
 ```
 
-This generates per-stock CSVs under `src/data/datasets/stock/2020-01-02/`, a ticker list, and a trading calendar file.
+By default the script reads `instruments/csi300.txt`. To use CSI500 without editing the file:
+
+```
+QLIB_INSTRUMENT=csi500.txt python scripts/step1_qlib_to_csv.py
+```
+
+**Behavior:** Each run **removes** the previous `2020-01-02/` output folder and the A-Share ticker/calendar metadata files under `src/data/datasets/stock/`, then regenerates them so you do not mix old and new exports.
+
+**Outputs:**
+- Per-stock CSVs: `src/data/datasets/stock/2020-01-02/AShare_<sh|sz|bj>…_1.csv`
+- `AShare_tickers_qualify_dr-0.98_min-5_smooth.csv` — ticker list for training (`--market AShare`)
+- `AShare_aver_line_dates.csv` — trading dates aligned with the tensors
 
 ### Step 2: Pretrain (A-Share)
+
+Uses `--market AShare` and the stock dataset under `2020-01-02/`; no separate logic per exchange. After changing the index or re-running Step 1, run pretrain again.
 
 ```
 cd ./CI-STHPAN_self_supervised
@@ -91,7 +106,7 @@ cd ./CI-STHPAN_self_supervised
 bash ./scripts/finetune/ft_ashare.sh
 ```
 
-The finetune script loops over alpha values (1, 2, 4, 6, 8, 10) — select the best based on validation loss.
+The finetune script loops over alpha values (1, 2, 4, 6, 8, 10). Pick the best checkpoint using validation loss. Testing uses the same A-Share ticker tensor layout as pretraining (`Learner.test` supports `market=AShare`).
 
 
 
